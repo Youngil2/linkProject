@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.practice.kyi.board.dao.BoardDAO;
 import com.practice.kyi.board.dao.vo.BoardVO;
 import com.practice.kyi.board.service.BoardService;
+import com.practice.kyi.common.dao.ChatDAO;
+import com.practice.kyi.common.dao.vo.FaqVO;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 
@@ -16,6 +18,9 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	
 	@Autowired
 	BoardDAO boardDAO;
+	
+	@Autowired
+	ChatDAO chatDAO;
 
 
 	@Override
@@ -52,6 +57,20 @@ public class BoardServiceImpl extends EgovAbstractServiceImpl implements BoardSe
 	@Override
 	public BoardVO boardForm(String boardSeq) {
 		return boardDAO.boardForm(boardSeq);
+	}
+
+
+	@Override
+	public List<FaqVO> selectfaqList(FaqVO vo) {
+		List<FaqVO> list = boardDAO.faqList(vo);
+		return list;
+	}
+
+
+	@Override
+	public List<FaqVO> findFaq(FaqVO vo) {
+		List<FaqVO> list = chatDAO.findFaq(vo);
+		return list;
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.practice.kyi.board.dao.vo.BoardVO;
+import com.practice.kyi.common.dao.vo.FaqVO;
 
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 
@@ -34,6 +35,10 @@ public class BoardDAO extends EgovAbstractMapper{
 	//게시판 폼 호출
 	public BoardVO boardForm(String boardSeq) {
 		return this.selectOne("BoardDAO.boardForm",boardSeq);
+	}
+	//faq 리스트 호출
+	public List<FaqVO> faqList(FaqVO vo){
+		return this.selectList("BoardDAO.faqList", vo);
 	}
 	
 }

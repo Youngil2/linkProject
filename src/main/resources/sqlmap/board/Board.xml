@@ -66,6 +66,72 @@
 	    ORDER BY 
 	        board_seq DESC;	
 	</select>
+	<!-- faq 리스트 호출 -->
+	<select id="faqList" parameterType="FaqVO" resultType="FaqVO">
+		SELECT
+			B.faq_seq as faqSeq,
+			B.category,
+			B.answer,
+			B.question,
+			B.keywords,
+			B.use_yn,
+			B.regist_date as registDate,
+			B.regist_user as registUser,
+			B.open_count as openCount,
+			B.update_date as updateDate,
+			B.update_user as updateUser,
+			B.total_count AS totalCount
+		FROM (
+			SELECT
+				row_number() OVER (ORDER BY faq_seq DESC) AS RN,
+		        COUNT(*) OVER () AS total_count,
+		        faq_seq,
+		        category,
+		        answer,
+		        question,
+		        keywords,
+		        use_yn,
+		        regist_user,
+		        regist_date,
+		        open_count,
+		        update_date,
+		        update_user
+		   	FROM
+		   		tb_faq
+		   	WHERE
+		   		1=1
+		   	<choose>
+	            <when test="searchType == 'answer'">
+	                AND answer ILIKE '%' || #{searchKeyword} || '%'
+	            </when>
+	            <when test="searchType == 'question'">
+	                AND question ILIKE '%' || #{searchKeyword} || '%'
+	            </when>
+	            <otherwise>
+	                AND (
+	                    category ILIKE '%' || #{searchKeyword} || '%'
+	                    OR 
+	                    question ILIKE '%' || #{searchKeyword} || '%'
+	                    OR 
+	                    keywords ILIKE '%' || #{searchKeyword} || '%'
+	                    OR 
+	                    answer ILIKE '%' || #{searchKeyword} || '%'
+	                )
+	            </otherwise>
+          </choose>
+	    )AS B
+	    WHERE 
+	        RN BETWEEN #{firstIndex} AND #{lastIndex}
+	    ORDER BY 
+	        faq_seq DESC;	
+	</select>
+	<!-- 카테고리 및 키워드로 answer 찾기 -->
+	<select id="findFaq" parameterType="FaqVO" resultType="FaqVO">
+		select
+			*
+		from
+			tb_faq
+	</select>
 	 <!-- 게시글 생성-->
     <insert id="insertBoard" parameterType="BoardVO">
     	    <selectKey keyProperty="boardSeq" resultType="String" order="BEFORE">
@@ -97,6 +163,34 @@
 				#{secretYn}
 		    )    
     </insert>
+    <insert id="insertFaq" parameterType="FaqVO">
+       <selectKey keyProperty="boardSeq" resultType="String" order="BEFORE">
+       		SELECT CONCAT('FAQ_', LPAD((COALESCE(MAX(CAST(SUBSTRING(faq_seq, 5) AS INTEGER)), 0) + 1)::TEXT, 3, '0'))
+		    FROM tb_faq
+		    WHERE faq_seq LIKE 'FAQ_%'
+		</selectKey>
+	    INSERT INTO tb_faq (
+	        faq_seq,
+	        category,
+	        answer,
+	        question,
+	        keywords,
+	        use_yn,
+	        regist_user,
+	        regist_date,
+	        open_count
+	    ) VALUES (
+	        #{faqSeq},
+	        #{category},
+	        #{answer},
+	        #{question},
+	        #{keywords},
+	        #{useYn},
+	        #{registUser},
+	        now(),
+	        0
+	    )
+	</insert>
     
     <!--게실분 권한 체크   -->
 	<select id="boardChk" parameterType="String" resultType="BoardVO">

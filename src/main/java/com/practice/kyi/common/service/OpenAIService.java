@@ -1,9 +1,12 @@
 package com.practice.kyi.common.service;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,11 +17,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.practice.kyi.common.dao.vo.ChatVO;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class OpenAIService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(OpenAIService.class);
 	
     @Value("${openai.api.key}")
     private String apiKey;
@@ -65,7 +67,7 @@ public class OpenAIService {
             return "응답을 받을 수 없습니다.";
             
         } catch (Exception e) {
-            log.error("OpenAI API 호출 오류: ", e);
+        	logger.error("OpenAI API 호출 오류: ", e);
             return "죄송합니다. 응답을 생성할 수 없습니다.";
         }
     }

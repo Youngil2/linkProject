@@ -22,6 +22,7 @@
         <typeAlias type="java.util.LinkedHashMap" alias="linkedHashMap" />
 		<typeAlias type="com.practice.kyi.common.dao.vo.LoginVO" alias="LoginVO"/>
 		<typeAlias type="com.practice.kyi.common.dao.vo.CommonVO" alias="CommonVO"/>
+		<typeAlias type="com.practice.kyi.common.dao.vo.FaqVO" alias="FaqVO"/>
 		<typeAlias type="com.practice.kyi.admin.dao.vo.TopMenuVO" alias="TopMenuVO"/>
 		<typeAlias type="com.practice.kyi.admin.dao.vo.SubMenuVO" alias="SubMenuVO"/>
 		<typeAlias type="com.practice.kyi.admin_link.dao.vo.ApiConfigVO" alias="ApiConfigVO"/>

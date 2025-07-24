@@ -26,6 +26,7 @@ import com.practice.kyi.board.dao.vo.BoardFileVO;
 import com.practice.kyi.board.dao.vo.BoardVO;
 import com.practice.kyi.board.service.BoardService;
 import com.practice.kyi.board.service.FileService;
+import com.practice.kyi.common.dao.vo.FaqVO;
 import com.practice.kyi.config.PageUtil;
 import com.practice.kyi.config.Pagination;
 
@@ -58,6 +59,8 @@ public class BoardController {
     	
     	if(topMenu.contains("data")) {
     		return "board/dataList";
+    	}else if(subMenu.contains("faq")){
+    		return "board/faqList";
     	}else {
     		return "board/boardList";
     	}
@@ -101,6 +104,49 @@ public class BoardController {
     	
     	return data;
     }
+    
+    @PostMapping("/faq_list_up")
+    @ResponseBody
+    public Map<String, Object> faqListUp(@RequestBody Map<String, Object> request, HttpServletRequest req){
+    	Map<String, Object> data = new HashMap<>();
+    	
+		HttpSession session = req.getSession();
+		String currentUserId = (String) session.getAttribute("memberId");
+    	
+	    // 요청값 추출
+	    int pageUnit = request.get("pageUnit") != null ? Integer.parseInt(request.get("pageUnit").toString()) : 10;
+	    int pageIndex = request.get("pageIndexTop") != null ? Integer.parseInt(request.get("pageIndexTop").toString()) : 1;
+	    String searchKeyword = request.get("searchKeyword") != null ? request.get("searchKeyword").toString() : "";
+	    String searchType = request.get("searchType") != null ? request.get("searchType").toString() : "";
+	    
+	    FaqVO vo = new FaqVO();
+	    vo.setPageUnit(pageUnit);
+	    vo.setPageIndex(pageIndex);
+	    vo.setSearchKeyword(searchKeyword);
+	    vo.setSearchType(searchType);
+	    
+	    // 페이징 처리
+	    Pagination pagination = PageUtil.setPagination(vo);
+	    
+	    // 리스트 조회
+	    List<FaqVO> list = boardService.selectfaqList(vo);
+	    
+	    int totalCount = 0;
+	    if (!list.isEmpty()) {
+	        totalCount = list.get(0).getTotalCount(); // VO에 totalCount 들어오는 경우
+	    }
+	
+	    pagination.setTotalRecordCount(totalCount);
+	
+	    // 응답 구성
+	    data.put("currentUserId", currentUserId);
+	    data.put("list", list);
+	    data.put("totalCount", totalCount);
+	
+    	
+    	return data;
+    }
+    
     
     @GetMapping("/{topMenu}/{subMenu}/regist")
     public String boardRegist(@PathVariable String topMenu,
