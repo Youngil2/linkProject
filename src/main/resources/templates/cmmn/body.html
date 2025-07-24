@@ -21,7 +21,8 @@
     	
 	<script type="text/javascript" th:src="@{/js/chart/chart.umd.js}"></script>
 	<script type="text/javascript" th:src="@{/js/cmmn/header.js}"></script>	
-	<script type="text/javascript" th:src="@{/js/cmmn/left.js}"></script>	
+	<script type="text/javascript" th:src="@{/js/cmmn/left.js}"></script>
+	<script type="text/javascript" th:src="@{/js/cmmn/chat.js}"></script>	
 	
 	
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -30,13 +31,49 @@
 	<link rel="stylesheet" th:href="@{/css/cmmn/left.css}">
 	<link rel="stylesheet" th:href="@{/css/cmmn/header.css}">
 	<link rel="stylesheet" th:href="@{/css/cmmn/page.css}">
+	<link rel="stylesheet" th:href="@{/css/cmmn/chat.css}">
 </head>
 <body class="bg-dark">
 	<div th:replace="~{cmmn/header :: header}"></div>
 	<div class="wrapper">
-    <div th:replace="~{cmmn/left :: left}"></div>        
-    <div class="content" layout:fragment="content"></div>
+    	<div th:replace="~{cmmn/left :: left}"></div>        
+    	<div class="content" layout:fragment="content"></div>
     </div>
+    
+    
+	<!-- 채팅 토글 버튼 -->
+	<button class="chat-toggle-btn" id="chatToggleBtn">
+	    <i class="fas fa-comments"></i>
+	    <div class="chat-badge" id="chatBadge">1</div>
+	</button>
+    <!-- 채팅창 -->
+	<div class="chat-window" id="chatWindow">
+	    <div class="chat-header">
+	        <h5><i class="fas fa-robot me-2"></i>AI 어시스턴트</h5>
+	        <button class="chat-close" id="chatCloseBtn">
+	            <i class="fas fa-times"></i>
+	        </button>
+	    </div>
+	    
+	    <div class="chat-messages" id="chatMessages">
+	        <div class="message bot-message">
+	            <div class="message-bubble">
+	                안녕하세요! 무엇을 도와드릴까요? 😊
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <div class="typing-indicator" id="typingIndicator">
+	        <span class="typing-dots">AI가 답변을 준비 중입니다</span>
+	    </div>
+	    
+	    <div class="chat-input-container">
+	        <div class="chat-input-group">
+	            <textarea id="chatMessageInput" placeholder="메시지를 입력하세요..." rows="1"></textarea>
+	            <button id="chatSendButton">전송</button>
+	        </div>
+	    </div>
+	</div>
     <input type="hidden" id="sessionTimeoutSeconds" th:value="${session.sessionTimeoutSeconds}" />
 </body>
 <script th:inline="javascript" type="text/javascript">
