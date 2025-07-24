@@ -150,6 +150,9 @@ async function sendMessage() {
     const $input = $('#chatMessageInput');
     const message = $input.val().trim();
     
+	const token = $("meta[name='_csrf']").attr("content");
+	const header = $("meta[name='_csrf_header']").attr("content");
+	
     if (!message) {
         $input.focus();
         return;
@@ -169,12 +172,12 @@ async function sendMessage() {
     
     try {
         const response = await $.ajax({
-            url: '/api/chat',
+            url: '/user/chat',
             method: 'POST',
             contentType: 'application/json',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_csrf"]').attr('content')
-            },
+			beforeSend: function (xhr) {
+			    xhr.setRequestHeader(header, token);
+			},
             data: JSON.stringify({ message: message }),
             timeout: 30000 // 30초 타임아웃
         });

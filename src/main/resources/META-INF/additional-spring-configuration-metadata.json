@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "upload.file.path",
-  "type": "java.lang.String",
-  "description": "A description for 'upload.file.path'"
-}]}
+{"properties": [
+  {
+    "name": "upload.file.path",
+    "type": "java.lang.String",
+    "description": "A description for 'upload.file.path'"
+  },
+  {
+    "name": "openai.api.key",
+    "type": "java.lang.String",
+    "description": "A description for 'openai.api.key'"
+  }
+]}
