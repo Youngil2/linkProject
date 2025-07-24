@@ -1,0 +1,355 @@
+/* 전체 컨테이너 스타일 개선 */
+.container {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* 페이지 제목 스타일 개선 */
+.text-center.mb-4.text-primary.fw-bold {
+    font-size: 2.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 2rem !important;
+    color: #2c3e50 !important;
+}
+
+/* 카드 스타일 개선 */
+.card {
+    border: none !important;
+    border-radius: 15px !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.95) !important;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.15) !important;
+}
+
+/* 카드 헤더 스타일 개선 */
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    padding: 1.25rem !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), transparent);
+    pointer-events: none;
+}
+
+.card-header.bg-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.card-header.bg-success {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+}
+
+.card-header.bg-info {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%) !important;
+}
+
+.card-header.bg-warning {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+}
+
+.card-header.bg-secondary {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%) !important;
+    color: #333 !important;
+}
+
+.card-header.bg-dark {
+    background: linear-gradient(135deg, #434343 0%, #000000 100%) !important;
+}
+
+.card-header.bg-danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%) !important;
+}
+
+/* 메트릭 카드 스타일 개선 */
+.metric-number {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.metric-label {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+/* 메트릭 배경 색상 개선 */
+.bg-success.bg-opacity-10 {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05)) !important;
+    border-left: 4px solid #4caf50;
+}
+
+.bg-warning.bg-opacity-10 {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05)) !important;
+    border-left: 4px solid #ffc107;
+}
+
+.bg-info.bg-opacity-10 {
+    background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(23, 162, 184, 0.05)) !important;
+    border-left: 4px solid #17a2b8;
+}
+
+.bg-primary.bg-opacity-10 {
+    background: linear-gradient(135deg, rgba(13, 110, 253, 0.1), rgba(13, 110, 253, 0.05)) !important;
+    border-left: 4px solid #0d6efd;
+}
+
+/* 테이블 스타일 개선 */
+.info-table {
+    font-size: 0.95rem;
+}
+
+.info-table td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+.info-table td:first-child {
+    width: 40%;
+    font-weight: 600;
+    color: #495057;
+    background: rgba(248, 249, 250, 0.5);
+}
+
+.info-table td:last-child {
+    font-weight: 500;
+    color: #212529;
+}
+
+.info-table tr:hover {
+    background: rgba(13, 110, 253, 0.05);
+    transition: all 0.2s ease;
+}
+
+/* 타임라인 스타일 개선 */
+.timeline-container {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid #e9ecef;
+    padding-bottom: 1rem;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #0d6efd;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.timeline-item.success:before {
+    background-color: #198754;
+}
+
+.timeline-item.error:before {
+    background-color: #dc3545;
+}
+
+.timeline-item.warning:before {
+    background-color: #ffc107;
+}
+
+.timeline-item .timeline-content {
+    background: rgba(255,255,255,0.8);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 0.5rem;
+}
+
+.timeline-item .timeline-time {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.timeline-item .timeline-title {
+    font-weight: 600;
+    color: #212529;
+    margin-top: 0.25rem;
+}
+
+/* JSON 뷰어 스타일 개선 */
+.json-viewer {
+    max-height: 350px;
+    overflow-y: auto;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    line-height: 1.6;
+    color: #495057;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 스크롤바 스타일 개선 */
+.timeline-container::-webkit-scrollbar,
+.json-viewer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.timeline-container::-webkit-scrollbar-track,
+.json-viewer::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb,
+.json-viewer::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover,
+.json-viewer::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.3);
+}
+
+/* 버튼 스타일 개선 */
+.btn {
+    border-radius: 8px !important;
+    padding: 0.6rem 1.5rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.btn-outline-secondary {
+    background: transparent !important;
+    border: 2px solid #6c757d !important;
+    color: #6c757d !important;
+}
+
+.btn-outline-secondary:hover {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+    color: white !important;
+}
+
+/* 브레드크럼 스타일 개선 */
+.breadcrumb {
+    background: rgba(255,255,255,0.8) !important;
+    border-radius: 8px !important;
+    padding: 0.75rem 1rem !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.breadcrumb-item a {
+    color: #495057 !important;
+    font-weight: 500;
+}
+
+.breadcrumb-item.active {
+    color: #0d6efd !important;
+    font-weight: 600;
+}
+
+/* 페이지 헤더 개선 */
+.bg-white.rounded-3.shadow-sm {
+    background: rgba(255,255,255,0.95) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* 오류 섹션 스타일 개선 */
+.border-danger {
+    border-color: #dc3545 !important;
+    border-width: 2px !important;
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+.card:nth-child(4) { animation-delay: 0.4s; }
+
+/* 반응형 개선 */
+@media (max-width: 768px) {
+    .metric-number {
+        font-size: 2.5rem;
+    }
+    
+    .text-center.mb-4.text-primary.fw-bold {
+        font-size: 2rem;
+    }
+    
+    .card-header {
+        padding: 1rem !important;
+        font-size: 1rem;
+    }
+    
+    .timeline-container {
+        max-height: 300px;
+    }
+    
+    .json-viewer {
+        max-height: 250px;
+        font-size: 0.8rem;
+    }
+}

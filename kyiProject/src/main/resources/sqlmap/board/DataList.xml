@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="DataLink">
+	<!-- 컬럼명 조회 쿼리 -->
+	<select id="getColumnNames" parameterType="map" resultType="map">
+	    SELECT
+	        c.column_name AS columnname,
+	        COALESCE(col_description(pgc.oid, c.ordinal_position), c.column_name) AS columncomment
+	    FROM information_schema.columns c
+	    LEFT JOIN pg_class pgc ON pgc.relname = c.table_name
+	    LEFT JOIN pg_namespace pgn ON pgn.oid = pgc.relnamespace
+	    WHERE 1=1
+	        AND c.table_schema = #{schema}
+	        AND pgn.nspname = #{schema}
+	        AND c.table_name = #{tableName}
+	        AND column_name != 'sync_dt'
+	    ORDER BY c.ordinal_position
+	</select>
+
+    <!-- 연계테이블 컬럼 조회 -->
+	<select id="getColumnList" parameterType="map" resultType="String">
+		SELECT 
+			string_agg(column_name, ', ' ORDER BY ordinal_position) as column_list
+		FROM 
+			information_schema.columns
+		WHERE table_schema = #{schema}
+		  AND table_name = #{tableName}
+		  AND column_name != 'sync_dt'
+	</select>
+	<!-- 연계데이터 추출 -->
+	<select id="selectDataList"  parameterType="map" resultType="map">
+	    SELECT
+	    	B.total_count AS totalCount, 
+	    	${columnList}
+	    FROM (
+	        SELECT 
+	            row_number() OVER (ORDER BY sync_dt DESC) AS RN,
+	            COUNT(*) OVER () AS total_count,
+	            ${columnList}
+	        FROM ${target_table}
+	        WHERE 1=1
+    <if test="searchKeyword != null and searchKeyword != ''">
+                AND CONCAT(${columnList}) ILIKE '%' || #{searchKeyword} || '%'
+    </if>
+	    ) AS B
+	    <if test="firstIndex != null and lastIndex != null">
+	        WHERE RN BETWEEN #{firstIndex} AND #{lastIndex}
+	    </if>
+	    ORDER BY RN
+	</select>
+	
+	<!-- 전체 데이터 조회 (페이징 없음) -->
+	<select id="selectAllDataList" parameterType="map" resultType="map">
+	    SELECT ${columnList}
+	    FROM ${target_table}
+	    <where>
+	        <if test="searchKeyword != null and searchKeyword != '' and searchType != null and searchType != ''">
+	            AND ${searchType} LIKE CONCAT('%', #{searchKeyword}, '%')
+	        </if>
+	    </where>
+	    ORDER BY 1
+	</select>
+	
+	<!--api 명 호출   -->
+	<select id="selectApiNm" resultType="String">
+		SELECT 
+			api_name
+		FROM 
+		  	tb_api_config
+		WHERE 
+		  	target_table = #{targetTable}
+	</select>
+</mapper>

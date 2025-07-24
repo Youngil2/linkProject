@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cmmn/body}">
+<head>
+	<script type="text/javascript" th:src="@{/js/mng/memberMng.js}"></script>
+	<style>
+		.modal-footer {
+			justify-content: center;
+			}
+	</style>
+</head>
+
+<div layout:fragment="content">
+	<div class="container bg-white p-4 rounded shadow">
+		<h2 class="text-center mb-4">회원 관리</h2>
+
+		<form>
+			<div class="row align-items-center mb-3 g-2">
+				<div class="col-md-2">
+					<select id="searchType" class="form-select form-select-sm">
+						<option value="" selected>전체</option>
+						<option value="memberName">회원명</option>
+						<option value="memberId">회원Id</option>
+					</select>
+				</div>
+               <!-- 검색 키워드 입력 -->
+                <div class="col-md-3">
+                    <input class="form-control form-control-sm" type="text" id="searchKeyword" name="searchKeyword">
+                </div>
+
+                <!-- 검색 버튼 -->
+                <div class="col-md-1">
+                    <button type="button" id="searchButton" class="btn btn-sm btn-primary w-100">검색</button>
+                </div>
+			</div>
+		</form>
+		<div class="col-md-12 d-flex justify-content-around" id="filterRadioGroup">
+		    <!-- 승인 상태 필터 -->
+		    <div class="me-4">
+		        <strong class="me-2">승인 상태:</strong>
+		        <div class="form-check form-check-inline">
+		            <input class="form-check-input" type="radio" name="approveYnChk" value="" id="approveAll" checked>
+		            <label class="form-check-label" for="approveAll">전체</label>
+		        </div>
+		        <div class="form-check form-check-inline">
+		            <input class="form-check-input" type="radio" name="approveYnChk" value="Y" id="approved">
+		            <label class="form-check-label" for="approved">승인</label>
+		        </div>
+		        <div class="form-check form-check-inline">
+		            <input class="form-check-input" type="radio" name="approveYnChk" value="N" id="notApproved">
+		            <label class="form-check-label" for="notApproved">미승인</label>
+		        </div>
+		    </div>
+		</div>
+		<div class="d-flex justify-content-end mb-3">
+			<button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">회원 추가</button>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered align-middle">
+				<thead class="table-light">
+					<tr>
+						<th scope="col">순번</th>						
+						<th scope="col">회원 ID</th>
+						<th scope="col">회원 이메일</th>
+						<th scope="col">회원 이름</th>
+						<th scope="col">기관 및 회사</th>
+						<th scope="col">회원 가입날짜</th>
+						<th scope="col">승인 여부</th>
+						<th scope="col">승인 날짜</th>
+						<th scope="col">차단 및 해제</th>
+					</tr>
+				</thead>
+				<tbody id="memberTable"></tbody>
+			</table>
+		</div>
+
+		<div class="row mt-3 g-3 justify-content-between align-items-center">
+			<div class="col-md-auto">
+				<small><span id="totalCountTop">0</span>건 검색됨. 페이지당:</small>
+				<select class="form-select form-select-sm d-inline-block w-auto ms-2 pageUnitTop" name="pageUnitTop" onchange="fn_menuList()">
+					<option selected="selected" value="10">10 건</option>
+					<option value="20">20 건</option>
+					<option value="50">50 건</option>
+					<option value="100">100 건</option>
+					<option value="1000">1,000 건</option>
+				</select>
+			</div>
+			<div id="topPagination" class="col-md-auto pagination"></div>
+		</div>
+	</div>
+	
+	<!-- 회원가입 모달 -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="joinMember">
+        <div class="modal-header">
+          <h5 class="modal-title">회원가입</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+		<div class="mb-3">
+		  <label class="form-label">아이디</label>
+		  <div class="d-flex align-items-center">
+		    <input type="text" class="form-control me-2" id="registerMemberId" name="registerMemberId">
+		    <button type="button" class="btn btn-primary" id="memberChk" style="white-space: nowrap;">중복체크</button>
+		  </div>
+		</div>
+          <div class="mb-3">
+            <label>비밀번호</label>
+            <input type="password" class="form-control"id="registerMemberPw"  name="registerMemberPw">
+          </div>
+          <div class="mb-3">
+            <label>비밀번호 확인</label>
+            <input type="password" class="form-control" id="registerMemberPw2">
+          </div>
+          <div class="mb-3">
+            <label>이메일</label>
+            <input type="email" class="form-control"id="registerEmail"  name="registerEmail">
+          </div>
+           <div class="mb-3">
+            <label>이름</label>
+            <input type="text" class="form-control"id="registerName"  name="registerName">
+          </div>
+          <div class="mb-3">
+            <label>기관 및 부서</label>
+            <input type="text" class="form-control" id="registerCompany"  name="registerCompany">
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-primary joinMemberButton">가입하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+	
+</div>
+</html>

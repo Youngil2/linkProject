@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="publicData">
+
+    <!-- Map 기반 데이터 삽입 (메인 사용) -->
+    <insert id="insertDynamicDataMap" parameterType="PublicDataVO">
+        INSERT INTO 
+        <if test="schemaName != null and schemaName != ''">
+            ${schemaName}.${tableName}
+        </if>
+        <if test="schemaName == null or schemaName == ''">
+            ${tableName}
+        </if>
+        (
+            <foreach collection="dataMap.keys" item="key" separator=",">
+                ${key}
+            </foreach>
+            , sync_dt
+        ) VALUES (
+            <foreach collection="dataMap.values" item="value" separator=",">
+                <choose>
+                    <when test="value == null">NULL</when>
+                    <when test="value == ''">''</when>
+                    <otherwise>#{value}</otherwise>
+                </choose>
+            </foreach>
+            , CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <!-- 테이블 존재 여부 확인 -->
+    <select id="checkTableExists" parameterType="PublicDataVO" resultType="int">
+    	/* checkTableExists 테이블 존재 여부 쿼리 */
+        SELECT COUNT(*)
+        FROM information_schema.tables
+        WHERE 1=1
+        <if test="schemaName != null and schemaName != ''">
+            AND table_schema = #{schemaName}
+        </if>
+        AND table_name = #{tableName}
+    </select>
+    
+     <!-- 테이블 데이터 여부 확인 -->
+	<select id="checkTableDataCount" parameterType="PublicDataVO" resultType="int">
+	/* checkTableDataCount 테이블 내 데이터 존재 여부 쿼리 */
+	    SELECT COUNT(*)
+	    FROM 
+	    <choose>
+	        <when test="schemaName != null and schemaName != ''">
+	            ${schemaName}.${tableName}
+	        </when>
+	        <otherwise>
+	            ${tableName}
+	        </otherwise>
+	    </choose>
+	</select>
+
+    <!-- 테이블 컬럼 정보 조회 -->
+    <select id="selectTableColumns" parameterType="PublicDataVO" resultType="Map">
+        SELECT
+            column_name as columnName,
+            data_type as dataType,
+            is_nullable as isNullable,
+            column_default as columnDefault,
+            character_maximum_length as maxLength
+        FROM information_schema.columns
+        WHERE 1=1
+        <if test="schemaName != null and schemaName != ''">
+            AND table_schema = #{schemaName}
+        </if>
+        AND table_name = #{tableName}
+        ORDER BY ordinal_position
+    </select>
+
+    <!-- 테이블 TRUNCATE -->
+    <delete id="truncateTable" parameterType="PublicDataVO">
+        TRUNCATE TABLE 
+        <if test="schemaName != null and schemaName != ''">
+            ${schemaName}.${tableName}
+        </if>
+        <if test="schemaName == null or schemaName == ''">
+            ${tableName}
+        </if>
+    </delete>
+    
+	<!-- 테이블 및 컬럼 코멘트 조회 -->
+	<select id="selectTableAndColumnComments" parameterType="PublicDataVO" resultType="Map">
+	    SELECT
+	        pgc.relname AS tableName,
+	        COALESCE(obj_description(pgc.oid, 'pg_class'), '') AS tableComment,
+	        c.column_name AS columnName,
+	        COALESCE(col_description(pgc.oid, c.ordinal_position), '') AS columnComment
+	    FROM information_schema.columns c
+	    LEFT JOIN pg_class pgc ON pgc.relname = c.table_name
+	    LEFT JOIN pg_namespace pgn ON pgn.oid = pgc.relnamespace
+	    WHERE 1=1
+	        <if test="schemaName != null and schemaName != ''">
+	            AND c.table_schema = #{schemaName}
+	            AND pgn.nspname = #{schemaName}
+	        </if>
+	        AND c.table_name = #{tableName}
+	    ORDER BY c.ordinal_position
+	</select>
+
+</mapper>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cmmn/body}">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 보기</title>
+    <link rel="stylesheet" th:href="@{/css/board/boardForm.css}">
+    <script th:src="@{/js/board/boardView.js}"></script>
+</head>
+
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header text-white bg-primary text-center fw-bold fs-5">게시판 보기</div>
+                    <div class="card-body">
+                        <div>
+                            <!-- 기본 정보 섹션 -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- 제목 -->
+                                    <div class="mb-3">
+                                        <label for="boardTitle" class="form-label fw-bold">제목</label>
+                                        <input type="text" class="form-control" id="boardTitle" name="boardTitle" 
+                                               th:value="${board != null ? board.boardTitle : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- 서브메뉴명 (읽기 전용) -->
+                                    <div class="mb-3">
+                                        <label for="subMenuNm" class="form-label fw-bold">게시판</label>
+                                        <input type="text" class="form-control" id="subMenuNm" name="subMenuNm" 
+                                               th:value="${board != null ? board.subMenuNm : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 내용 섹션 -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">내용</label>
+                                <div class="border rounded p-3 bg-light" style="min-height: 300px; white-space: pre-wrap;" 
+                                     th:text="${board != null ? board.contents : ''}">
+                                </div>
+                            </div>
+                            
+                            <!-- 첨부파일 섹션 (읽기 전용) -->
+                            <div class="mb-4" th:if="${files != null && !files.isEmpty()}">
+                                <label class="form-label fw-bold">첨부파일</label>
+                                <div class="border rounded p-3 bg-light">
+                                    <div class="file-list" th:each="file : ${files}">
+                                        <div class="d-flex align-items-center py-2 border-bottom">
+                                            <i class="fas fa-file me-2"></i>
+                                            <!-- 파일 다운로드 링크 추가 -->
+                                            <a th:href="@{/user/file/download(file_seq=${file.fileSeq})}" 
+                                               class="text-decoration-none" 
+                                               th:text="${file.originalFileNm}">파일명
+                                               </a>
+                                            <small class="text-muted ms-auto" 
+                                                   th:text="${#numbers.formatDecimal(file.fileSize / 1024 / 1024, 1, 2)} + ' MB'">파일크기</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 게시글 정보 섹션 -->
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <!-- 공개 여부 -->
+                                    <div class="mb-3">
+                                        <label for="secretYn" class="form-label fw-bold">공개 여부</label>
+                                        <input type="text" class="form-control" id="secretYn" name="secretYn" 
+                                               th:value="${board != null ? (board.secretYn == 'Y' ? '비공개' : '공개') : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- 조회수 -->
+                                    <div class="mb-3">
+                                        <label for="openCount" class="form-label fw-bold">조회수</label>
+                                        <input type="text" class="form-control" id="openCount" name="openCount" 
+                                               th:value="${board != null ? board.openCount : 0}"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- 등록일 -->
+                                    <div class="mb-3">
+                                        <label for="registDate" class="form-label fw-bold">등록일</label>
+                                        <input type="text" class="form-control" id="registDate" name="registDate" 
+                                               th:value="${board != null ? board.registDate : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <!-- 작성자 -->
+                                    <div class="mb-3">
+                                        <label for="registUser" class="form-label fw-bold">작성자</label>
+                                        <input type="text" class="form-control" id="registUser" name="registUser" 
+                                               th:value="${board != null ? board.registUser : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 최종 수정일 (수정된 경우에만 표시) -->
+                            <div class="row" th:if="${board != null && board.updateDate != null}">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="updateDate" class="form-label fw-bold">최종 수정일</label>
+                                        <input type="text" class="form-control" id="updateDate" name="updateDate" 
+                                               th:value="${board != null && board.updateDate != null ? board.updateDate : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 버튼 -->
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="button" class="btn btn-primary me-2 board_update"
+                                		th:data-boardseq="${boardSeq}"  
+                                		th:data-topmenu="${topMenu}" 
+								        th:data-submenu="${subMenu}">수정</button>
+                                <button type="button" class="btn btn-outline-primary board-list-btn"
+                                        th:data-topmenu="${topMenu}" 
+                                        th:data-submenu="${subMenu}">목록</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="topMenuDAO">
+	<!--탑 메뉴 조회(조회용) -->
+	<select id="topMenuList" parameterType="TopMenuVO" resultType="TopMenuVO">
+	    SELECT 
+	           B.top_menu_seq AS topMenuSeq,
+	           B.top_menu AS topMenu,
+	           B.top_menu_nm AS topMenuNm,
+	           B.top_menu_order AS topMenuOrder,
+	           B.delete_yn AS deleteYn,
+	           B.total_count AS totalCount
+	    FROM (
+	        SELECT 
+	            row_number() OVER (ORDER BY top_menu_seq) AS RN,
+	            COUNT(*) OVER () AS total_count, 
+	            top_menu_seq,
+	            top_menu,
+	            top_menu_nm,
+	            top_menu_order,
+	            delete_yn
+	        FROM
+	            tb_top_menu_mng
+	        WHERE             
+	            1=1
+ 			<choose>
+	            <when test="searchType == 'menuNm'">
+	                AND top_menu_nm ILIKE '%' || #{searchKeyword} || '%'
+	            </when>
+	            <when test="searchType == 'menu'">
+	                AND top_menu ILIKE '%' || #{searchKeyword} || '%'
+	            </when>
+	            <otherwise>
+	                AND (
+	                    top_menu ILIKE '%' || #{searchKeyword} || '%'
+	                    OR 
+	                    top_menu_nm ILIKE '%' || #{searchKeyword} || '%'
+	                )
+	            </otherwise>
+          </choose>
+          <choose>
+		      <when test="deleteYn != null and deleteYn != ''">
+		          AND delete_yn = #{deleteYn}
+		      </when>
+		  </choose>
+	    )AS B
+	    WHERE 
+	        RN BETWEEN #{firstIndex} AND #{lastIndex}
+	    ORDER BY 
+	        top_menu_order;
+	</select>
+	
+	<!--탑 메뉴 생성  -->
+	<insert id="registTopMenu" parameterType="TopMenuVO">
+	    INSERT INTO tb_top_menu_mng
+	    	(top_menu_seq, top_menu, top_menu_nm, top_menu_order, delete_yn)
+		SELECT
+		    CONCAT('TOP_', LPAD((next_seq)::TEXT, 3, '0')) AS top_menu_seq,
+	    		 #{topMenu},
+	    		 #{topMenuNm},
+	    		  next_order,
+	    		 'N'	    		 
+	   FROM (
+    		SELECT
+        		COALESCE(MAX(CAST(SUBSTRING(top_menu_seq, 5) AS INTEGER)), 0) + 1 AS next_seq,
+        		COALESCE(MAX(top_menu_order), 0) + 1 AS next_order
+    		FROM tb_top_menu_mng
+		) AS seq_data;
+	</insert>
+	
+	<!--topMenu 체크  -->
+	<select id="selectTopMenu" resultType="integer">
+		SELECT COUNT(*)
+		  FROM TB_TOP_MENU_MNG
+		  WHERE top_menu = #{topMenu}
+	</select>
+	<!--topMenuNm 체크  -->
+	<select id="selectTopMenuNm" resultType="integer">
+		SELECT COUNT(*)
+		  FROM TB_TOP_MENU_MNG
+		  WHERE top_menu_nm = #{topMenuNm}
+	</select>
+ 	<!--topMenuNmForm 불러오기  -->
+ 	<select id="topMenuForm" parameterType="TopMenuVO" resultType="TopMenuVO">
+ 		SELECT 
+ 			*
+		FROM TB_TOP_MENU_MNG
+		  WHERE top_menu_seq = #{topMenuSeq}
+ 	</select>
+ 	<!--탑 메뉴 수정  -->
+	<update id="updateTopMenu" parameterType="TopMenuVO">
+		UPDATE 
+			TB_TOP_MENU_MNG
+		SET 
+			top_menu = #{topMenu}, 
+			top_menu_nm = #{topMenuNm}
+		WHERE 
+			top_menu_seq=#{topMenuSeq}
+	</update>
+	<!--탑 메뉴 활성화  -->
+	<update id="activeTopMenu" parameterType="TopMenuVO">
+		UPDATE 
+			TB_TOP_MENU_MNG
+		SET 
+			delete_yn = #{deleteYn}
+		WHERE 
+			top_menu_seq=#{topMenuSeq}
+	</update>
+	<!--탑 메뉴 순서변경  -->
+	<update id="updateTopMenuOrder" parameterType="TopMenuVO">
+	    UPDATE TB_TOP_MENU_MNG
+	    SET top_menu_order = #{topMenuOrder}
+	    WHERE top_menu_seq = #{topMenuSeq}
+	</update>
+</mapper>

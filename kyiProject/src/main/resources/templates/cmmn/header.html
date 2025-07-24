@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="header" class="header" >
+	<a th:href="@{/main}" class="logo">종합 관리 시스템</a>
+	<div class="header-right">
+	      <span th:text="${session.memberId}+'('+${session.memberRole}+')'+' 님 로그인 유지시간: '"></span><span id="countdown"></span>
+	    <!-- <button onclick="location.href='/logout'" class="logout-button">로그아웃</button> -->
+	    <button onclick="logoutAndRedirect()">로그아웃</button>
+
+	</div>
+</div>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cmmn/body}">
+<head>
+<script type="text/javascript" th:src="@{/js/mng/subMenuMngForm.js}"></script>
+<script type="text/javascript" th:src="@{/js/mng/subMenuMng.js}"></script>
+</head>
+
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10">
+                <div class="card shadow-sm">
+                    <div class="card-header text-white bg-primary text-center fw-bold fs-5"  th:text="${subMenu != null} ? '하위 메뉴 수정' : '하위 메뉴 생성'"></div>
+                    <div class="card-body">
+                        <form id="subMenuForm">
+                            <!-- 한글명 -->
+                            <div class="mb-4">
+                                <label for="topMenuNm" class="form-label">상위메뉴 한글명</label>
+					            <select id="topMenuNm" name="topMenuNm" class="form-select form-select-sm" aria-label="Small select example" style="margin-top: 5px; display: block; width: 100%;">
+									<option th:value="${subMenu != null ? subMenu.topMenuNm : ''}">선택하세요</option>
+				  				</select>
+                            </div>
+                            <!-- 영문명 -->
+                            <div class="mb-3">
+                                <label for="subMenu" class="form-label">하위메뉴 영문명</label>
+                                <input type="text" class="form-control" id="subMenu" name="subMenu" th:value="${subMenu != null ? subMenu.subMenu : ''}"
+                                       pattern="[A-Za-z_]+" placeholder="영어로만 입력해주세요"
+                                       oninput="this.value = this.value.replace(/[^a-zA-Z_]/g, '')">
+                                <div id="subMenuDiv" class="form-text text-danger"></div>
+                            </div>
+                            <!-- 한글명 -->
+                            <div class="mb-3">
+                                <label for="subMenuNm" class="form-label">하위메뉴 한글명</label>
+                                <input type="text" class="form-control" id="subMenuNm" name="subMenuNm" th:value="${subMenu != null ? subMenu.subMenuNm : ''}"
+                                       pattern="[가-힣]+" placeholder="한글로만 입력해주세요"
+                                       oninput="this.value = this.value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣ]/g, '')">
+                                <div id="subMenuNmDiv" class="form-text text-danger"></div>
+                            </div>
+
+                            <!-- 버튼 -->
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary me-2" id="subMenuChk">중복체크</button>
+                                    <button type="button"
+							            class="btn btn-primary me-2"
+							            th:id="${subMenu != null} ? 'subMenuUpdate' : 'subMenuCreate'"
+							            th:text="${subMenu != null} ? '수정' : '생성'"></button>
+                                <button type="button" class="btn btn-outline-primary" onclick="fn_menuLink('subMenuList')">목록</button>
+                            </div>
+                             <input type="hidden" id ="subMenuSeq" name="subMenuSeq" th:value="${subMenu != null ? subMenu.subMenuSeq : ''}" />
+                             <input type="hidden" id ="_subMenu"  th:value="${subMenu != null ? subMenu.subMenu : ''}" />
+                             <input type="hidden" id ="_subMenuNm"  th:value="${subMenu != null ? subMenu.subMenuNm : ''}" />
+                             <input type="hidden" id="_topMenuNm" th:value="${subMenu != null ? subMenu.topMenuNm : ''}" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

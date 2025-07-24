@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cmmn/body}">
+<head>
+	<script type="text/javascript" th:src="@{/js/mng/topMenuMng.js}"></script>    
+</head>
+
+<div layout:fragment="content">
+	<div class="container bg-white p-4 rounded shadow">
+		<h2 class="text-center mb-4">상위메뉴 관리</h2>
+
+		<form>
+			<div class="row align-items-center mb-3 g-2">
+				<div class="col-md-2">
+					<select id="searchType" class="form-select form-select-sm">
+						<option value="" selected>전체</option>
+						<option value="menuNm">한글명</option>
+						<option value="menu">영문명</option>
+					</select>
+				</div>
+               <!-- 검색 키워드 입력 -->
+                <div class="col-md-3">
+                    <input class="form-control form-control-sm" type="text" id="searchKeyword" name="searchKeyword" placeholder="메뉴 명">
+                </div>
+
+                <!-- 검색 버튼 -->
+                <div class="col-md-1">
+                    <button type="button" id="searchButton" class="btn btn-sm btn-primary w-100">검색</button>
+                </div>
+			</div>
+		</form>
+		
+		<div class="col-md-12 d-flex justify-content-around" id="filterRadioGroup">
+		    <div class="me-4">
+		        <strong class="me-2">메뉴 보기:</strong>
+		        <div class="form-check form-check-inline">
+		            <input class="form-check-input" type="radio" name="deleteYnChk" value="" id="all" checked>
+		            <label class="form-check-label" for="all">전체</label>
+		        </div>
+		        <div class="form-check form-check-inline">
+		            <input class="form-check-input" type="radio" name="deleteYnChk" value="N" id="active">
+		            <label class="form-check-label" for="active">활성화</label>
+		        </div>
+		        <div class="form-check form-check-inline">
+		            <input class="form-check-input" type="radio" name="deleteYnChk" value="Y" id="inactive">
+		            <label class="form-check-label" for="inactive">비활성</label>
+		        </div>
+		    </div>
+		</div>
+	    
+		<div class="d-flex justify-content-end mb-3">
+			<button class="btn btn-outline-primary me-2" id="orderUpdate">순서 변경</button>
+			<button class="btn btn-outline-primary" onclick="fn_menuLink('menuRegist');">메뉴 추가</button>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered align-middle">
+				<thead class="table-light">
+					<tr>
+						<th scope="col">순번</th>		
+						<th scope="col">상위메뉴 영문명</th>
+						<th scope="col">상위메뉴 한글명</th>
+						<th scope="col">수정/삭제</th>
+					</tr>
+				</thead>
+				<tbody id="topMenuTable"></tbody>
+			</table>
+		</div>
+
+		<div class="row mt-3 g-3 justify-content-between align-items-center">
+			<div class="col-md-auto">
+				<small><span id="totalCountTop">0</span>건 검색됨. 페이지당:</small>
+				<select class="form-select form-select-sm d-inline-block w-auto ms-2 pageUnitTop" name="pageUnitTop" onchange="fn_menuList()">
+					<option selected="selected" value="10">10 건</option>
+					<option value="20">20 건</option>
+					<option value="50">50 건</option>
+					<option value="100">100 건</option>
+					<option value="1000">1,000 건</option>
+				</select>
+			</div>
+			<div id="topPagination" class="col-md-auto pagination"></div>
+		</div>
+	</div>
+</div>
+</html>

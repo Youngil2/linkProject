@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="application.properties"></properties>
+	<settings>
+        <!-- value= "STDOUT_LOGGING" 파라미터 쿼리 확인시 설정 -->
+        <setting name="logImpl" value="NO_LOGGING"/>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="multipleResultSetsEnabled" value="false"/>
+        <setting name="useColumnLabel" value="true"/>
+        <setting name="useGeneratedKeys" value="true"/>
+        <setting name="defaultExecutorType" value="REUSE"/>
+        <setting name="defaultStatementTimeout" value="300"/>
+        <setting name="callSettersOnNulls" value="true"/>
+        <setting name="jdbcTypeForNull" value="NULL" />
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+	<typeAliases>
+		<typeAlias type="java.util.Map" alias="map" />
+        <typeAlias type="java.util.List" alias="list" />
+        <typeAlias type="java.util.LinkedHashMap" alias="linkedHashMap" />
+		<typeAlias type="com.practice.kyi.common.dao.vo.LoginVO" alias="LoginVO"/>
+		<typeAlias type="com.practice.kyi.common.dao.vo.CommonVO" alias="CommonVO"/>
+		<typeAlias type="com.practice.kyi.admin.dao.vo.TopMenuVO" alias="TopMenuVO"/>
+		<typeAlias type="com.practice.kyi.admin.dao.vo.SubMenuVO" alias="SubMenuVO"/>
+		<typeAlias type="com.practice.kyi.admin_link.dao.vo.ApiConfigVO" alias="ApiConfigVO"/>
+		<typeAlias type="com.practice.kyi.admin_link.dao.vo.PublicDataVO" alias="PublicDataVO"/>
+		<typeAlias type="com.practice.kyi.admin_link.dao.vo.ScheduleHistoryVO" alias="ScheduleHistoryVO"/>
+		<typeAlias type="com.practice.kyi.board.dao.vo.BoardVO" alias="BoardVO"/>
+		<typeAlias type="com.practice.kyi.board.dao.vo.BoardFileVO" alias="BoardFileVO"/>
+	</typeAliases>
+</configuration>

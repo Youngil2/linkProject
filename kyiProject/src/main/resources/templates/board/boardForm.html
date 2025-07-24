@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{cmmn/body}">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 작성</title>
+    <script th:src="@{/js/board/boardForm.js}"></script>
+    <script th:src="@{/js/board/preViewForm.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/board/boardForm.css}">
+</head>
+
+
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header text-white bg-primary text-center fw-bold fs-5" 
+                         th:text="${boardSeq != null} ? '게시판 수정' : '게시판 생성'"></div>
+                    <div class="card-body">
+                        <form id="boardForm">
+                            <!-- 기본 정보 섹션 -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- 제목 -->
+                                    <div class="mb-3">
+                                        <label for="boardTitle" class="form-label">제목 <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="boardTitle" name="boardTitle" 
+                                               th:value="${board != null ? board.boardTitle : ''}"
+                                               placeholder="제목을 입력해주세요">
+                                        <div id="titleDiv" class="form-text text-danger"></div>
+                                    </div>
+                                </div>
+	                            <div class="col-md-6">
+	                            	<!-- 서브메뉴명 (읽기 전용) -->
+	                                <div class="mb-3">
+	                                	<label for="subMenuNm" class="form-label">게시판</label>
+	                                    <input type="text" class="form-control" id="subMenuNm" name="subMenuNm" 
+	                                               th:value="${board != null ? board.subMenuNm : subMenuNm}"
+	                                               readonly>
+	                                </div>
+	                            </div>
+                            </div>
+                            
+
+                            <!-- 내용 작성 섹션 -->
+                            <div class="mb-4">
+                                <label for="contents" class="form-label fw-bold">내용</label>
+                                <textarea class="form-control" id="contents" name="contents" rows="15" 
+                                          th:text="${board != null ? board.contents : ''}"
+                                          placeholder="내용을 입력해주세요"></textarea>
+                                <div id="contentsDiv" class="form-text text-danger"></div>
+                            </div>
+                            
+							<!-- 파일 첨부 섹션 -->
+							<div class="mb-4">
+							    <label class="form-label fw-bold">파일 첨부</label>
+							    <div class="border rounded p-3 bg-light">
+							        <!-- 파일 선택 버튼 -->
+							        <div class="d-flex justify-content-between align-items-center mb-3">
+							            <div>
+							                <input type="file" class="form-control" id="fileInput" name="files" multiple
+							                       accept="*/*" style="display: none;">
+							                <button type="button" class="btn btn-outline-primary btn-sm" id="fileSelectBtn">
+							                    <i class="fas fa-plus"></i> 파일 선택
+							                </button>
+							                <small class="text-muted ms-2">최대 10개 파일까지 업로드 가능</small>
+							            </div>
+							            <button type="button" class="btn btn-outline-danger btn-sm" id="clearAllFiles">
+							                <i class="fas fa-trash"></i> 전체 삭제
+							            </button>
+							        </div>
+							
+							        <!-- 기존 파일 목록 (수정 시에만 표시) -->
+							        <div th:if="${files != null && !files.isEmpty()}" class="mb-3">
+							            <h6 class="fw-bold text-primary mb-2">기존 파일 목록</h6>
+							            <div class="existing-files">
+							                <div th:each="file : ${files}" class="file-item d-flex justify-content-between align-items-center p-2 mb-2 border rounded bg-white">
+							                    <div class="file-info d-flex align-items-center">
+							                        <i class="fas fa-file me-2 text-primary"></i>
+							                        <div>
+							                            <div class="file-name fw-bold" th:text="${file.originalFileNm}"></div>
+							                            <div class="file-size text-muted small" th:text="${#numbers.formatDecimal(file.fileSize / 1024 / 1024, 1, 2)} + ' MB'"></div>
+							                        </div>
+							                    </div>
+							                    <div class="file-actions">
+							                        <a type="button" th:href="@{/user/file/download(file_seq=${file.fileSeq})}" class="btn btn-sm btn-outline-primary me-1 download-btn" 
+							                                th:data-file-seq="${file.fileSeq}"
+							                                title="다운로드">
+							                            <i class="fas fa-download"></i>
+							                        </a>
+							                        <a type="button" class="btn btn-sm btn-outline-danger delete-existing-btn" 
+							                                th:data-file-seq="${file.fileSeq}"
+							                                title="삭제">
+							                            <i class="fas fa-trash"></i>
+							                        </a>
+							                    </div>
+							                </div>
+							            </div>
+							        </div>
+							
+							        <!-- 새로 선택된 파일 목록 -->
+							        <div id="fileList" class="file-list">
+							            <div class="text-muted text-center py-3" id="noFileMessage" 
+							                 th:style="${files != null && !files.isEmpty()} ? 'display: none;' : ''">
+							                선택된 파일이 없습니다.
+							            </div>
+							        </div>
+							    </div>
+							</div>
+
+                            <!-- 추가 정보 섹션 -->
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <!-- 공개 여부 -->
+                                    <div class="mb-3">
+                                        <label for=secretYn class="form-label">공개 여부</label>
+                                        <select id="secretYn" name="secretYn" class="form-select">
+                                            <option value="N" th:selected="${board == null || board.secretYn == 'N'}">공개</option>
+                                            <option value="Y" th:selected="${board != null && board.secretYn == 'Y'}">비공개</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" th:if="${board != null}">
+                                <!-- 조회수 (수정 시에만 표시) -->
+                                    <div class="mb-3">
+                                        <label for="openCount" class="form-label">조회수</label>
+                                        <input type="number" class="form-control" id="openCount" name="openCount" 
+                                               th:value="${board != null ? board.openCount : 0}"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" th:if="${board != null}">
+                                    <!-- 등록일 (수정 시에만 표시) -->
+                                    <div class="mb-3">
+                                        <label for="registDate" class="form-label">등록일</label>
+                                        <input type="text" class="form-control" id="registDate" name="registDate" 
+                                               th:value="${board != null ? board.registDate : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 작성자 정보 (수정 시에만 표시) -->
+                            <div class="row" th:if="${board != null}">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="registUser" class="form-label">작성자</label>
+                                        <input type="text" class="form-control" id="registUser" name="registUser" 
+                                               th:value="${board != null ? board.registUser : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" th:if="${board != null && board.updateDate != null}">
+                                    <div class="mb-3">
+                                        <label for="updateDate" class="form-label">최종 수정일</label>
+                                        <input type="text" class="form-control" id="updateDate" name="updateDate" 
+                                               th:value="${board != null && board.updateDate != null ? board.updateDate : ''}"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 버튼 -->
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="button" class="btn btn-secondary me-2" id="boardPreview">미리보기</button>
+                                <button type="button" 
+                                        class="btn btn-primary me-2"
+                                        th:id="${board != null} ? 'boardUpdate' : 'boardCreate'"
+                                        th:text="${board != null} ? '수정' : '등록'"
+                                        th:data-topmenu="${topMenu}" 
+								        th:data-submenu="${subMenu}"></button>
+                                <button type="button" class="btn btn-outline-primary board-list-btn"
+								        th:data-topmenu="${topMenu}" 
+								        th:data-submenu="${subMenu}">목록</button>
+                            </div>
+
+                            <!-- Hidden fields -->
+                            <input type="hidden" id="boardSeq" name="boardSeq" th:value="${board != null ? board.boardSeq : ''}" />
+                            <input type="hidden" id="subMenu" name="subMenu" th:value="${board != null ? board.subMenu : subMenu}" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</html>
