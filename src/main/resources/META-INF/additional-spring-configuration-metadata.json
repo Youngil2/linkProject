@@ -8,5 +8,60 @@
     "name": "openai.api.key",
     "type": "java.lang.String",
     "description": "A description for 'openai.api.key'"
+  },
+  {
+    "name": "openai.model",
+    "type": "java.lang.String",
+    "description": "A description for 'openai.model'"
+  },
+  {
+    "name": "openai.temperature",
+    "type": "java.lang.String",
+    "description": "A description for 'openai.temperature'"
+  },
+  {
+    "name": "openai.max.tokens",
+    "type": "java.lang.String",
+    "description": "A description for 'openai.max.tokens'"
+  },
+  {
+    "name": "company.name",
+    "type": "java.lang.String",
+    "description": "A description for 'company.name'"
+  },
+  {
+    "name": "company.email",
+    "type": "java.lang.String",
+    "description": "A description for 'company.email'"
+  },
+  {
+    "name": "company.description",
+    "type": "java.lang.String",
+    "description": "A description for 'company.description'"
+  },
+  {
+    "name": "company.phone",
+    "type": "java.lang.String",
+    "description": "A description for 'company.phone'"
+  },
+  {
+    "name": "company.business.hours",
+    "type": "java.lang.String",
+    "description": "A description for 'company.business.hours'"
+  },
+  {
+    "name": "company.address",
+    "type": "java.lang.String",
+    "description": "A description for 'company.address'"
+  },
+  {
+    "name": "spring.config.use-legacy-processing",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.config.use-legacy-processing'"
+  },
+  {
+    "name": "spring.config.encoding",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.config.encoding'"
   }
 ]}
